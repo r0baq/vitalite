@@ -1,10 +1,9 @@
 package pl.mroczkarobert.vitalite;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +17,8 @@ public class Process {
     public void init() throws IOException {
         System.out.println("Start");
 
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpResponse response = client.execute(new HttpGet("https://www.bi-polska.pl/inwestycja/vitalite/lista-lokali"));
-        System.out.println(EntityUtils.toString(response.getEntity()));
+        Document doc = Jsoup.connect("https://www.bi-polska.pl/inwestycja/vitalite/lista-lokali").get();
+        doc.select("div.estate-details-list-toggle").forEach(System.out::println);
 
         System.out.println("End");
     }
