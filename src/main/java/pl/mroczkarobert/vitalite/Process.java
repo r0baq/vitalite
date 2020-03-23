@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.Clock;
+import java.util.Iterator;
 
 @Component
 public class Process {
@@ -21,10 +22,16 @@ public class Process {
     public void init() throws IOException {
         System.out.println("Start");
 
-//        Document doc = Jsoup.connect("https://www.bi-polska.pl/inwestycja/vitalite/lista-lokali").get();
-//        doc.select("div.estate-details-list-toggle").forEach(System.out::println);
+        for (int i = 1; i <=4 ; i++) {
+            Document doc = Jsoup.connect("https://www.bi-polska.pl/inwestycja/vitalite/lista-lokali/page:" + i).get();
+            Iterator<Element> iterator = doc.select("div.estate-details-list-toggle").iterator();
 
-        repo.save(new Flat("RMR", 1));
+            while (iterator.hasNext()) {
+                Element element = iterator.next();
+                Integer estateIndex = Integer.valueOf(element.attr("data-estate-index"));
+                repo.save(new Flat(element.toString(), estateIndex));
+            }
+        }
 
         System.out.println("End");
     }

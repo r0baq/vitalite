@@ -1,9 +1,10 @@
 package pl.mroczkarobert.vitalite;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Flat {
@@ -11,11 +12,17 @@ public class Flat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String content;
-    private Integer page;
 
-    public Flat(String content, Integer page) {
+    @CreationTimestamp
+    private Date createdDate;
+
+    @Column(length = 2000)
+    private String content;
+
+    private Integer estateIndex;
+
+    public Flat(String content, Integer estateIndex) {
         this.content = content;
-        this.page = page;
+        this.estateIndex = estateIndex;
     }
 }
