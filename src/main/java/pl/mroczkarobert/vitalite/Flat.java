@@ -21,14 +21,21 @@ public class Flat {
 
     private Integer estateIndex;
 
+    private Action action;
+
     public Flat() {}
 
-    public Flat(String content, Integer estateIndex) {
+    public Flat(String content, Integer estateIndex, Action action) {
         this.content = content;
         this.estateIndex = estateIndex;
+        this.action = action;
     }
 
     public String getContent() {
         return content;
+    }
+
+    public Integer getEstateIndex() {
+        return estateIndex;
     }
 }

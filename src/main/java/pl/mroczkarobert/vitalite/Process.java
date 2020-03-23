@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.Clock;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
 @Component
 public class Process {
@@ -25,6 +27,7 @@ public class Process {
     @PostConstruct
     public void init() throws IOException {
         log.info("Start");
+        Set<Integer> processed = new HashSet<>();
 
         for (int i = 1; i <= 4 ; i++) {
             log.info("Page " + i);
@@ -36,6 +39,7 @@ public class Process {
                 Integer estateIndex = Integer.valueOf(element.attr("data-estate-index"));
                 String content = element.toString();
                 log.info("Estate " + estateIndex);
+                processed.add(estateIndex);
 
                 Flat flat = repo.findFirstByEstateIndexOrderByIdDesc(estateIndex);
                 if (flat != null) {
@@ -44,13 +48,23 @@ public class Process {
                         log.info("No changes");
 
                     } else {
-                        log.info("Changed!");
-                        repo.save(new Flat(content, estateIndex));
+                        log.info("Changed!\n " + content);
+                        repo.save(new Flat(content, estateIndex, Action.EDIT));
                     }
 
                 } else {
                     log.info("New!\n" + content);
-                    repo.save(new Flat(content, estateIndex));
+                    repo.save(new Flat(content, estateIndex, Action.NEW));
+                }
+            }
+        }
+
+        for(Flat flat : repo.findAll()) {
+            Integer index = flat.getEstateIndex();
+            if (!processed.contains(index)) {
+                if (repo.findByEstateIndexAndAction(index, Action.DELETE) == null) {
+                    log.info("Deleted!\n" + flat.getContent());
+                    repo.save(new Flat(flat.getContent(), index, Action.DELETE));
                 }
             }
         }

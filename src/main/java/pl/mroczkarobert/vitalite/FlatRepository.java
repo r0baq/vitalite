@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface FlatRepository extends CrudRepository<Flat, Long> {
     Flat findFirstByEstateIndexOrderByIdDesc(Integer estateIndex);
-//    List<Flat> findByEstateIndex(Integer estateIndex);
+    Flat findByEstateIndexAndAction(Integer estateIndex, Action action);
 }
