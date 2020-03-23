@@ -21,8 +21,14 @@ public class Flat {
 
     private Integer estateIndex;
 
+    public Flat() {}
+
     public Flat(String content, Integer estateIndex) {
         this.content = content;
         this.estateIndex = estateIndex;
+    }
+
+    public String getContent() {
+        return content;
     }
 }
