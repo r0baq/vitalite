@@ -28,6 +28,7 @@ public class Process {
     public void init() throws IOException {
         log.info("Start");
         Set<Integer> processed = new HashSet<>();
+        boolean anyChange = false;
 
         for (int i = 1; i <= 4 ; i++) {
             log.info("Page " + i);
@@ -50,11 +51,13 @@ public class Process {
                     } else {
                         log.info("Changed!\n " + content);
                         repo.save(new Flat(content, estateIndex, Action.EDIT));
+                        anyChange = true;
                     }
 
                 } else {
                     log.info("New!\n" + content);
                     repo.save(new Flat(content, estateIndex, Action.NEW));
+                    anyChange = true;
                 }
             }
         }
@@ -69,6 +72,12 @@ public class Process {
             }
         }
 
+        if (anyChange) {
+            log.error("There were changes!");
+
+        } else {
+            log.warn("No changes at all.");
+        }
         log.info("End");
     }
 }
