@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -26,7 +27,34 @@ public class Process {
 
     @PostConstruct
     public void init() throws IOException {
-        log.info("Start");
+        checkVitalite();
+        //checkOutlet();
+    }
+
+    private void checkOutlet() throws IOException {
+        log.info("Start check Outlet");
+        Set<Integer> processed = new HashSet<>();
+        boolean anyChange = false;
+
+        Document doc = Jsoup.connect("https://www.bi-polska.pl/oferta/outlet").get();
+        Element table = doc.select("#outlet-table").first();
+
+        Iterator<Element> iterator = table.select("tbody > tr").iterator();
+
+        while (iterator.hasNext()) {
+            Element element = iterator.next();
+            System.out.println("RMR id=" + element.id());
+            if (!StringUtils.isEmpty(element.id())) {
+                System.out.println("OFERTA!");
+            }
+            System.out.println(element);
+        }
+
+        log.info("End check Outlet");
+    }
+
+    private void checkVitalite() throws IOException {
+        log.info("Start check Vitalite");
         Set<Integer> processed = new HashSet<>();
         boolean anyChange = false;
 
@@ -78,6 +106,6 @@ public class Process {
         } else {
             log.warn("No changes at all.");
         }
-        log.info("End");
+        log.info("End check Vitalite");
     }
 }
