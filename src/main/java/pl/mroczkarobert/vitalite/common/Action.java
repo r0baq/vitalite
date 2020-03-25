@@ -1,4 +1,4 @@
-package pl.mroczkarobert.vitalite;
+package pl.mroczkarobert.vitalite.common;
 
 public enum Action {
     NEW,

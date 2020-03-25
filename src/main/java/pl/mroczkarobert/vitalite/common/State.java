@@ -1,4 +1,6 @@
-package pl.mroczkarobert.vitalite;
+package pl.mroczkarobert.vitalite.common;
+
+import pl.mroczkarobert.vitalite.common.Kind;
 
 import java.util.HashSet;
 import java.util.Set;

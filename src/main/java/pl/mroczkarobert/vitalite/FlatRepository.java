@@ -1,6 +1,9 @@
 package pl.mroczkarobert.vitalite;
 
 import org.springframework.data.repository.CrudRepository;
+import pl.mroczkarobert.vitalite.common.Action;
+import pl.mroczkarobert.vitalite.common.Flat;
+import pl.mroczkarobert.vitalite.common.Kind;
 
 import java.util.List;
 
