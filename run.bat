@@ -1,4 +1,4 @@
-mode con: cols=200 lines=60
+mode con: cols=200 lines=55
 
 "C:\Program Files\Java\jdk1.8.0_131\bin\java.exe" -Dmaven.multiModuleProjectDirectory=C:\Users\mrocz\IdeaProjects\vitalite "-Dmaven.home=C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3" "-Dclassworlds.conf=C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3\bin\m2.conf" "-Dmaven.ext.class.path=C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven-event-listener.jar" "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\lib\idea_rt.jar=52706:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\bin" -Dfile.encoding=UTF-8 -classpath "C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.3.4\plugins\maven\lib\maven3\boot\plexus-classworlds-2.6.0.jar" org.codehaus.classworlds.Launcher -Didea.version2019.3.4 org.springframework.boot:spring-boot-maven-plugin:2.2.5.RELEASE:run
 

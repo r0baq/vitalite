@@ -19,23 +19,26 @@ public class Flat {
     @Column(length = 2000)
     private String content;
 
-    private Integer estateIndex;
+    private String estateIndex;
 
     private Action action;
 
+    private Kind kind;
+
     public Flat() {}
 
-    public Flat(String content, Integer estateIndex, Action action) {
+    public Flat(String content, String estateIndex, Action action, Kind kind) {
         this.content = content;
         this.estateIndex = estateIndex;
         this.action = action;
+        this.kind = kind;
     }
 
     public String getContent() {
         return content;
     }
 
-    public Integer getEstateIndex() {
+    public String getEstateIndex() {
         return estateIndex;
     }
 }
