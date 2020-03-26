@@ -15,7 +15,7 @@ public class Flat {
     @CreationTimestamp
     private Date createdDate;
 
-    @Column(length = 2000)
+    @Column(length = 10000)
     private String content;
 
     private String estateIndex;
