@@ -21,33 +21,37 @@ public class FlatService {
             String index = flat.getEstateIndex();
             if (!state.processed.contains(index)) {
                 if (repo.findByEstateIndexAndActionAndKind(index, Action.DELETE, state.kind) == null) {
-                    LOG.info("Deleted!\n" + flat.getContent());
-                    repo.save(new Flat(flat.getContent(), index, flat.getPhone(), Action.DELETE, state.kind));
+                    LOG.info("Deleted!");
+                    repo.save(new Flat(flat.getContent(), index, flat.getPhone(), flat.getSummaryTop(), Action.DELETE, state.kind));
                     state.anyChange = true;
                 }
             }
         }
     }
 
-    public void checkEstate(String content, String estateIndex, String phone, State state) {
+    public void checkEstate(String content, String estateIndex, String phone, String summaryTop, State state) {
         LOG.info("Estate " + estateIndex);
         state.processed.add(estateIndex);
 
         Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(estateIndex, state.kind);
         if (flat != null) {
             LOG.info("Found");
-            if (content.equals(flat.getContent()) && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))) {
+            if (
+                content.equals(flat.getContent())
+                && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))
+                && ((summaryTop == null && flat.getSummaryTop() == null) || summaryTop.equals(flat.getSummaryTop()))
+            ) {
                 LOG.info("No changes");
 
             } else {
-                LOG.info("Changed!\n " + content + " " + phone);
-                repo.save(new Flat(content, estateIndex, phone, Action.EDIT, state.kind));
+                LOG.info("Changed!");
+                repo.save(new Flat(content, estateIndex, phone, summaryTop, Action.EDIT, state.kind));
                 state.anyChange = true;
             }
 
         } else {
-            LOG.info("New!\n" + content);
-            repo.save(new Flat(content, estateIndex, phone, Action.NEW, state.kind));
+            LOG.info("New!");
+            repo.save(new Flat(content, estateIndex, phone, summaryTop, Action.NEW, state.kind));
             state.anyChange = true;
         }
     }

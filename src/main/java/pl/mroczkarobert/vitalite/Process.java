@@ -87,12 +87,13 @@ public class Process {
         String phone = doc.select("span.phone.hidden").first().text();
         String details = doc.select("section.propertyDetails").first().toString();
         String estateIndex = find(details, MORIZON_ID);
+        String summaryTop = doc.select("section.summaryTop").first().toString();
 
         details = clearViewsCount(details);
         details = replaceToday(details);
         details = replaceYesterday(details);
 
-        service.checkEstate(details, estateIndex, phone, state);
+        service.checkEstate(details, estateIndex, phone, summaryTop, state);
     }
 
     private String replaceToday(String details) {
@@ -135,7 +136,7 @@ public class Process {
             Element element = iterator.next();
 
             if (!StringUtils.isEmpty(element.id())) {
-                service.checkEstate(element.toString(), element.id(), null, state);
+                service.checkEstate(element.toString(), element.id(), null, null, state);
 
             } else {
                 investment = element.select("td div a").text();
@@ -159,7 +160,7 @@ public class Process {
 
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                service.checkEstate(element.toString(), element.attr("data-estate-index"), null, state);
+                service.checkEstate(element.toString(), element.attr("data-estate-index"), null, null, state);
             }
         }
 

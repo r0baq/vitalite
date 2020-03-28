@@ -18,6 +18,9 @@ public class Flat {
     @Column(length = 10000)
     private String content;
 
+    @Column(length = 10000)
+    private String summaryTop;
+
     private String estateIndex;
     private Action action;
     private Kind kind;
@@ -26,12 +29,13 @@ public class Flat {
 
     public Flat() {}
 
-    public Flat(String content, String estateIndex, String phone, Action action, Kind kind) {
+    public Flat(String content, String estateIndex, String phone, String summaryTop, Action action, Kind kind) {
         this.content = content;
         this.estateIndex = estateIndex;
         this.action = action;
         this.kind = kind;
         this.phone = phone;
+        this.summaryTop = summaryTop;
     }
 
     public String getContent() {
@@ -44,5 +48,9 @@ public class Flat {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getSummaryTop() {
+        return summaryTop;
     }
 }
