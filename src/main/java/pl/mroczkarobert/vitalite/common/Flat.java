@@ -19,20 +19,19 @@ public class Flat {
     private String content;
 
     private String estateIndex;
-
     private Action action;
-
     private Kind kind;
-
+    private String phone;
     private String comment;
 
     public Flat() {}
 
-    public Flat(String content, String estateIndex, Action action, Kind kind) {
+    public Flat(String content, String estateIndex, String phone, Action action, Kind kind) {
         this.content = content;
         this.estateIndex = estateIndex;
         this.action = action;
         this.kind = kind;
+        this.phone = phone;
     }
 
     public String getContent() {
@@ -41,5 +40,9 @@ public class Flat {
 
     public String getEstateIndex() {
         return estateIndex;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

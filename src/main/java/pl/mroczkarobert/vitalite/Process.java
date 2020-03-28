@@ -65,6 +65,14 @@ public class Process {
         checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033718261", state);
         checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033668086", state);
         checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-56m2-mzn2035995346", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2035404431", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-56m2-mzn2035404430", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-62m2-mzn2035404432", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033654864", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035536687", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035437185", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033578390", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-56m2-mzn2035417695", state);
 
         service.checkDelete(state);
         service.endReport(state);
@@ -80,7 +88,9 @@ public class Process {
         details = replaceToday(details);
         details = replaceYesterday(details);
 
-        service.checkEstate(details, estateIndex, state);
+        String phone = doc.select("span.phone.hidden").first().text();
+
+        service.checkEstate(details, estateIndex, phone, state);
     }
 
     private String replaceToday(String details) {
@@ -123,7 +133,7 @@ public class Process {
             Element element = iterator.next();
 
             if (!StringUtils.isEmpty(element.id())) {
-                service.checkEstate(element.toString(), element.id(), state);
+                service.checkEstate(element.toString(), element.id(), null, state);
 
             } else {
                 investment = element.select("td div a").text();
@@ -147,7 +157,7 @@ public class Process {
 
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                service.checkEstate(element.toString(), element.attr("data-estate-index"), state);
+                service.checkEstate(element.toString(), element.attr("data-estate-index"), null, state);
             }
         }
 

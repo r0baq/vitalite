@@ -22,14 +22,14 @@ public class FlatService {
             if (!state.processed.contains(index)) {
                 if (repo.findByEstateIndexAndActionAndKind(index, Action.DELETE, state.kind) == null) {
                     LOG.info("Deleted!\n" + flat.getContent());
-                    repo.save(new Flat(flat.getContent(), index, Action.DELETE, state.kind));
+                    repo.save(new Flat(flat.getContent(), index, flat.getPhone(), Action.DELETE, state.kind));
                     state.anyChange = true;
                 }
             }
         }
     }
 
-    public void checkEstate(String content, String estateIndex, State state) {
+    public void checkEstate(String content, String estateIndex, String phone, State state) {
         LOG.info("Estate " + estateIndex);
         state.processed.add(estateIndex);
 
@@ -41,13 +41,13 @@ public class FlatService {
 
             } else {
                 LOG.info("Changed!\n " + content);
-                repo.save(new Flat(content, estateIndex, Action.EDIT, state.kind));
+                repo.save(new Flat(content, estateIndex, phone, Action.EDIT, state.kind));
                 state.anyChange = true;
             }
 
         } else {
             LOG.info("New!\n" + content);
-            repo.save(new Flat(content, estateIndex, Action.NEW, state.kind));
+            repo.save(new Flat(content, estateIndex, phone, Action.NEW, state.kind));
             state.anyChange = true;
         }
     }
