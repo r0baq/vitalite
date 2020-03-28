@@ -24,6 +24,8 @@ public class Flat {
 
     private Kind kind;
 
+    private String comment;
+
     public Flat() {}
 
     public Flat(String content, String estateIndex, Action action, Kind kind) {

@@ -13,6 +13,9 @@ import pl.mroczkarobert.vitalite.common.State;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,8 +77,21 @@ public class Process {
         String details = doc.select("section.propertyDetails").first().toString();
         String estateIndex = find(details, MORIZON_ID);
         details = clearViewsCount(details);
+        details = replaceToday(details);
+        details = replaceYesterday(details);
 
         service.checkEstate(details, estateIndex, state);
+    }
+
+    private String replaceToday(String details) {
+        String today =  LocalDate.now().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        return details.replace("<strong>dzisiaj</strong>", today);
+    }
+
+    private String replaceYesterday(String details) {
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        String yesterdateString = yesterday.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        return details.replace("<strong>wczoraj</strong>", yesterdateString);
     }
 
     private String clearViewsCount(String details) {
