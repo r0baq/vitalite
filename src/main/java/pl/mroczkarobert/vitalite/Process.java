@@ -82,13 +82,15 @@ public class Process {
     private void checkMorizonEstate(String url, State state) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
+        LOG.debug(doc.toString());
+
+        String phone = doc.select("span.phone.hidden").first().text();
         String details = doc.select("section.propertyDetails").first().toString();
         String estateIndex = find(details, MORIZON_ID);
+
         details = clearViewsCount(details);
         details = replaceToday(details);
         details = replaceYesterday(details);
-
-        String phone = doc.select("span.phone.hidden").first().text();
 
         service.checkEstate(details, estateIndex, phone, state);
     }

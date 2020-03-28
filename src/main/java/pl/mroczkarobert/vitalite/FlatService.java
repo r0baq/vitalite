@@ -36,11 +36,11 @@ public class FlatService {
         Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(estateIndex, state.kind);
         if (flat != null) {
             LOG.info("Found");
-            if (content.equals(flat.getContent())) {
+            if (content.equals(flat.getContent()) && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))) {
                 LOG.info("No changes");
 
             } else {
-                LOG.info("Changed!\n " + content);
+                LOG.info("Changed!\n " + content + " " + phone);
                 repo.save(new Flat(content, estateIndex, phone, Action.EDIT, state.kind));
                 state.anyChange = true;
             }
