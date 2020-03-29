@@ -8,6 +8,8 @@ import pl.mroczkarobert.vitalite.common.Action;
 import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.State;
 
+import java.math.BigDecimal;
+
 @Service
 public class FlatService {
 
@@ -22,38 +24,43 @@ public class FlatService {
             if (!state.processed.contains(index)) {
                 if (repo.findByEstateIndexAndActionAndKind(index, Action.DELETE, state.kind) == null) {
                     LOG.info("Deleted!");
-                    repo.save(new Flat(flat.getContent(), index, flat.getPhone(), flat.getSummaryTop(), Action.DELETE, state.kind));
+                    repo.save(new Flat(flat, Action.DELETE));
                     state.anyChange = true;
                 }
             }
         }
     }
 
-    public void checkEstate(String content, String estateIndex, String phone, String summaryTop, State state) {
+    public void checkEstate(String url, String content, String estateIndex, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, State state) {
         LOG.info("Estate " + estateIndex);
         state.processed.add(estateIndex);
 
         Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(estateIndex, state.kind);
         if (flat != null) {
             LOG.info("Found");
-            if (
-                content.equals(flat.getContent())
-                && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))
-                && ((summaryTop == null && flat.getSummaryTop() == null) || summaryTop.equals(flat.getSummaryTop()))
-            ) {
+            if (notChanged(flat, content, phone, price, priceM2, livingArea)) {
                 LOG.info("No changes");
 
             } else {
                 LOG.info("Changed!");
-                repo.save(new Flat(content, estateIndex, phone, summaryTop, Action.EDIT, state.kind));
+                repo.save(new Flat(url, content, estateIndex, phone, price, priceM2, livingArea, Action.EDIT, state.kind));
                 state.anyChange = true;
             }
 
         } else {
             LOG.info("New!");
-            repo.save(new Flat(content, estateIndex, phone, summaryTop, Action.NEW, state.kind));
+            repo.save(new Flat(url, content, estateIndex, phone, price, priceM2, livingArea, Action.NEW, state.kind));
             state.anyChange = true;
         }
+    }
+
+    private boolean notChanged(Flat flat, String content, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea) {
+        return
+            content.equals(flat.getContent())
+            && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))
+            && ((price == null && flat.getPrice() == null) || price.compareTo(flat.getPrice()) == 0)
+            && ((priceM2 == null && flat.getPriceM2() == null) || priceM2.compareTo(flat.getPriceM2()) == 0)
+            && ((livingArea == null && flat.getLivingArea() == null) || livingArea.compareTo(flat.getLivingArea()) == 0);
     }
 
     public void startReport(State state) {

@@ -33,57 +33,56 @@ public class Process {
 
     @PostConstruct
     public void init() throws IOException {
-//        boolean changedVitalite = checkVitalite();
-//        boolean changedOutlet = checkOutlet();
+        boolean changedVitalite = checkVitalite();
+        boolean changedOutlet = checkOutlet();
         boolean changedMorizon = checkMorizon();
-//
-//        if (changedVitalite || changedOutlet || changedMorizon) {
-//            LOG.error("There were changes!");
-//
-//        } else {
-//            LOG.warn("No changes at all.");
-//        }
+
+        if (changedVitalite || changedOutlet || changedMorizon) {
+            LOG.error("There were changes!");
+
+        } else {
+            LOG.warn("No changes at all.");
+        }
     }
 
     private boolean checkMorizon() throws IOException {
         State state = new State(Kind.MORIZON);
         service.startReport(state);
 
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035929730", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035999835", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036084941", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036056741", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2035995336", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035995345", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-71m2-mzn2035995348", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036086103", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035746454", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-61m2-mzn2035987241", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-hektarowa-62m2-mzn2035990677", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987242", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987245", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033717168", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033718261", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033668086", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-56m2-mzn2035995346", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2035404431", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-56m2-mzn2035404430", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-62m2-mzn2035404432", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033654864", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035536687", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035437185", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033578390", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-56m2-mzn2035417695", state);
-//
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2034760968", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417696", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417689", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2033528456", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-71m2-mzn2035417693", state);
-//        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2033646418", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035929730", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035999835", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036084941", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036056741", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2035995336", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035995345", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-71m2-mzn2035995348", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036086103", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035746454", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-61m2-mzn2035987241", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-hektarowa-62m2-mzn2035990677", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987242", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987245", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033717168", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033718261", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033668086", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-56m2-mzn2035995346", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2035404431", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-56m2-mzn2035404430", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-62m2-mzn2035404432", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033654864", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035536687", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035437185", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033578390", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-56m2-mzn2035417695", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2034760968", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417696", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417689", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2033528456", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-71m2-mzn2035417693", state);
+        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2033646418", state);
         checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2033528463", state);
 
-//        service.checkDelete(state);
+        service.checkDelete(state);
         service.endReport(state);
         return state.anyChange;
     }
@@ -94,41 +93,23 @@ public class Process {
         LOG.debug(doc.toString());
 
         String phone = doc.select("span.phone.hidden").first().text();
+        BigDecimal price = getDetail(doc, "paramIconPrice");
+        BigDecimal priceM2 = getDetail(doc, "paramIconPriceM2");
+        BigDecimal livingArea = getDetail(doc, "paramIconLivingArea");
+
         String details = doc.select("section.propertyDetails").first().toString();
         String estateIndex = find(details, MORIZON_ID);
+        details = clearViewsCount(details);
+        details = replaceToday(details);
+        details = replaceYesterday(details);
 
-        BigDecimal price = getPrice(doc);
-        LOG.info("RMR01 " + price);
-
-        BigDecimal priceM2 = getPriceM2(doc);
-        LOG.info("RMR02 " + priceM2);
-
-        BigDecimal livingArea = getLivingArea(doc);
-        LOG.info("RMR02 " + priceM2);
-
-//        details = clearViewsCount(details);
-//        details = replaceToday(details);
-//        details = replaceYesterday(details);
-//
-//        service.checkEstate(details, estateIndex, phone, summaryTop, state);
+        service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, state);
     }
 
-    private BigDecimal getPrice(Document doc) {
-        String priceEm = doc.select("li.paramIconPrice > em").first().text();
-        String price = priceEm.replaceAll("[^0-9,]+","");
-        return new BigDecimal(price);
-    }
-
-    private BigDecimal getPriceM2(Document doc) {
-        String priceEm = doc.select("li.paramIconPriceM2 > em").first().text();
-        String price = priceEm.replaceAll("[^0-9,]+","").replace(",", ".");
-        return new BigDecimal(price);
-    }
-
-    private BigDecimal getLivingArea(Document doc) {
-        String em = doc.select("li.paramIconLivingArea > em").first().text();
-        String result = em.replaceAll("[^0-9,]+","").replace(",", ".");
-        return new BigDecimal(result);
+    private BigDecimal getDetail(Document doc, String cssClass) {
+        String emTag = doc.select("li." + cssClass + " > em").first().text();
+        String value = emTag.replaceAll("[^0-9,]+","").replace(",", ".");
+        return new BigDecimal(value);
     }
 
     private String replaceToday(String details) {
@@ -171,7 +152,7 @@ public class Process {
             Element element = iterator.next();
 
             if (!StringUtils.isEmpty(element.id())) {
-                service.checkEstate(element.toString(), element.id(), null, null, state);
+                service.checkEstate(null, element.toString(), element.id(), null, null, null, null, state);
 
             } else {
                 investment = element.select("td div a").text();
@@ -195,7 +176,7 @@ public class Process {
 
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                service.checkEstate(element.toString(), element.attr("data-estate-index"), null, null, state);
+                service.checkEstate(null, element.toString(), element.attr("data-estate-index"), null, null, null, null,state);
             }
         }
 
