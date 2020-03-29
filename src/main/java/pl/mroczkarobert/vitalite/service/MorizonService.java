@@ -28,7 +28,7 @@ public class MorizonService {
     @Autowired
     private FlatService service;
 
-    public boolean checkMorizon() throws IOException {
+    public boolean check() throws IOException {
         State state = new State(Kind.MORIZON);
         service.startReport(state);
 
@@ -78,23 +78,17 @@ public class MorizonService {
         LOG.debug(doc.toString());
 
         String phone = doc.select("span.phone.hidden").first().text();
-        BigDecimal price = getDetail(doc, "paramIconPrice");
-        BigDecimal priceM2 = getDetail(doc, "paramIconPriceM2");
-        BigDecimal livingArea = getDetail(doc, "paramIconLivingArea");
+        BigDecimal price = service.getDetail(doc, "li.paramIconPrice > em");
+        BigDecimal priceM2 = service.getDetail(doc, "li.paramIconPriceM2 > em");
+        BigDecimal livingArea = service.getDetail(doc, "li.paramIconLivingArea > em");
 
         String details = doc.select("section.propertyDetails").first().toString();
-        String estateIndex = find(details, MORIZON_ID);
+        String estateIndex = service.find(details, MORIZON_ID);
         details = clearViewsCount(details);
         details = replaceToday(details);
         details = replaceYesterday(details);
 
         service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, state);
-    }
-
-    private BigDecimal getDetail(Document doc, String cssClass) {
-        String emTag = doc.select("li." + cssClass + " > em").first().text();
-        String value = emTag.replaceAll("[^0-9,]+","").replace(",", ".");
-        return new BigDecimal(value);
     }
 
     private String replaceToday(String details) {
@@ -109,17 +103,7 @@ public class MorizonService {
     }
 
     private String clearViewsCount(String details) {
-        String viewsCount = find(details, VIEWS_COUNT);
+        String viewsCount = service.find(details, VIEWS_COUNT);
         return details.replace(viewsCount, "Liczba wyświetleń: xxx");
-    }
-
-    private String find(String details, Pattern pattern) {
-        Matcher matcher = pattern.matcher(details);
-        if (matcher.find()) {
-            return matcher.group(0);
-
-        } else {
-            throw new RuntimeException("Nie znaleziono w ofercie Morizona: " + pattern);
-        }
     }
 }

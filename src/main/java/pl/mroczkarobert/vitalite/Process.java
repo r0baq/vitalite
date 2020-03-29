@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import pl.mroczkarobert.vitalite.service.MorizonService;
+import pl.mroczkarobert.vitalite.service.OtodomService;
 import pl.mroczkarobert.vitalite.service.VitaliteService;
 
 import javax.annotation.PostConstruct;
@@ -19,14 +20,17 @@ public class Process {
     private VitaliteService vitaliteService;
     @Autowired
     private MorizonService morizonService;
+    @Autowired
+    private OtodomService otodomService;
 
     @PostConstruct
     public void init() throws IOException {
         boolean changedVitalite = vitaliteService.checkVitalite();
         boolean changedOutlet = vitaliteService.checkOutlet();
-        boolean changedMorizon = morizonService.checkMorizon();
+        boolean changedMorizon = morizonService.check();
+        boolean changedOtodom = otodomService.check();
 
-        if (changedVitalite || changedOutlet || changedMorizon) {
+        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
             LOG.error("There were changes!");
 
         } else {

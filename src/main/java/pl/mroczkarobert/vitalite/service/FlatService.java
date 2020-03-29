@@ -1,5 +1,6 @@
 package pl.mroczkarobert.vitalite.service;
 
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.State;
 
 import java.math.BigDecimal;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class FlatService {
@@ -77,5 +80,21 @@ public class FlatService {
         }
 
         LOG.info("End check: " + state.kind);
+    }
+
+    public BigDecimal getDetail(Document doc, String query) {
+        String emTag = doc.select(query).first().text();
+        String value = emTag.replaceAll("[^0-9,]+","").replace(",", ".");
+        return new BigDecimal(value);
+    }
+
+    public String find(String details, Pattern pattern) {
+        Matcher matcher = pattern.matcher(details);
+        if (matcher.find()) {
+            return matcher.group(0);
+
+        } else {
+            throw new RuntimeException("Nie znaleziono w ofercie: " + pattern);
+        }
     }
 }
