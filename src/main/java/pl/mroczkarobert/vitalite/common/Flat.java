@@ -4,7 +4,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Flat {
@@ -29,21 +31,13 @@ public class Flat {
     private BigDecimal livingArea;
     private String agent;
     private String agency;
+    private LocalDate updateDate;
 
     public Flat() {}
 
-    public Flat(String url, String content, String estateIndex, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, String agent, String agency, Action action, Kind kind) {
-        this.url = url;
-        this.content = content;
-        this.estateIndex = estateIndex;
-        this.action = action;
+    public Flat(Kind kind, String url) {
         this.kind = kind;
-        this.phone = phone;
-        this.price = price;
-        this.priceM2 = priceM2;
-        this.livingArea = livingArea;
-        this.agent = agent;
-        this.agency = agency;
+        this.url = url;
     }
 
     public Flat(Flat flat, Action action) {
@@ -57,6 +51,29 @@ public class Flat {
         this.price = flat.price;
         this.priceM2 = flat.priceM2;
         this.livingArea = flat.livingArea;
+        this.agent = flat.agent;
+        this.agency = flat.agency;
+        this.updateDate = flat.updateDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flat flat = (Flat) o;
+        return content.equals(flat.content) &&
+                Objects.equals(phone, flat.phone) &&
+                Objects.equals(price, flat.price) &&
+                Objects.equals(priceM2, flat.priceM2) &&
+                Objects.equals(livingArea, flat.livingArea) &&
+                Objects.equals(agent, flat.agent) &&
+                Objects.equals(agency, flat.agency) &&
+                Objects.equals(updateDate, flat.updateDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(content, phone, price, priceM2, livingArea, agent, agency, updateDate);
     }
 
     public String getContent() {
@@ -89,5 +106,53 @@ public class Flat {
 
     public String getAgency() {
         return agency;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    public void setKind(Kind kind) {
+        this.kind = kind;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setEstateIndex(String estateIndex) {
+        this.estateIndex = estateIndex;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setPriceM2(BigDecimal priceM2) {
+        this.priceM2 = priceM2;
+    }
+
+    public void setLivingArea(BigDecimal livingArea) {
+        this.livingArea = livingArea;
+    }
+
+    public void setAgent(String agent) {
+        this.agent = agent;
+    }
+
+    public void setAgency(String agency) {
+        this.agency = agency;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
     }
 }

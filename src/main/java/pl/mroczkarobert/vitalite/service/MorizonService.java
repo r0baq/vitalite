@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.mroczkarobert.vitalite.Process;
+import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.Kind;
 import pl.mroczkarobert.vitalite.common.State;
 
@@ -77,18 +78,23 @@ public class MorizonService {
         Document doc = Jsoup.connect(url).get();
         LOG.debug(doc.toString());
 
-        String phone = doc.select("span.phone.hidden").first().text();
-        BigDecimal price = service.getDetail(doc, "li.paramIconPrice > em");
-        BigDecimal priceM2 = service.getDetail(doc, "li.paramIconPriceM2 > em");
-        BigDecimal livingArea = service.getDetail(doc, "li.paramIconLivingArea > em");
+        Flat flat = new Flat(state.kind, url);
+
+        flat.setPhone(doc.select("span.phone.hidden").first().text());
+        flat.setPrice(service.getDetail(doc, "li.paramIconPrice > em"));
+        flat.setPriceM2(service.getDetail(doc, "li.paramIconPriceM2 > em"));
+        flat.setLivingArea(service.getDetail(doc, "li.paramIconLivingArea > em"));
 
         String details = doc.select("section.propertyDetails").first().toString();
-        String estateIndex = service.find(details, MORIZON_ID);
+        flat.setEstateIndex(service.find(details, MORIZON_ID));
+
         details = clearViewsCount(details);
         details = replaceToday(details);
         details = replaceYesterday(details);
 
-        service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, null, null, state);
+        flat.setContent(details);
+
+        service.checkEstate(flat, state);
     }
 
     private String replaceToday(String details) {

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import pl.mroczkarobert.vitalite.Process;
+import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.Kind;
 import pl.mroczkarobert.vitalite.common.State;
 
@@ -37,7 +38,12 @@ public class VitaliteService {
             Element element = iterator.next();
 
             if (!StringUtils.isEmpty(element.id())) {
-                service.checkEstate(null, element.toString(), element.id(), null, null, null, null, null, null, state);
+
+                Flat flat = new Flat(state.kind, null);
+                flat.setContent(element.toString());
+                flat.setEstateIndex(element.id());
+
+                service.checkEstate(flat, state);
 
             } else {
                 investment = element.select("td div a").text();
@@ -61,7 +67,12 @@ public class VitaliteService {
 
             while (iterator.hasNext()) {
                 Element element = iterator.next();
-                service.checkEstate(null, element.toString(), element.attr("data-estate-index"), null, null, null, null, null, null, state);
+
+                Flat flat = new Flat(state.kind, null);
+                flat.setContent(element.toString());
+                flat.setEstateIndex(element.attr("data-estate-index"));
+
+                service.checkEstate(flat, state);
             }
         }
 

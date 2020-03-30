@@ -6,11 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.Kind;
 import pl.mroczkarobert.vitalite.common.State;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.regex.Pattern;
 
 @Service
@@ -21,10 +23,12 @@ public class OtodomService {
     private static final String OTODOM_ID_PREFIX = "Nr oferty w biurze nieruchomości: ";
     private static final Pattern OTODOM_ID = Pattern.compile(OTODOM_ID_PREFIX + "\\S*");
 
+    private static final String UPDATE_DAYS_PREFIX = "Data aktualizacji: ";
+    private static final Pattern UPDATE_DAYS = Pattern.compile(UPDATE_DAYS_PREFIX + "\\d*");
+
     @Autowired
     private FlatService service;
 
-    //TODO abstrakcyjny serwis
     public boolean check() throws IOException {
         State state = new State(Kind.OTODOM);
         service.startReport(state);
@@ -36,25 +40,28 @@ public class OtodomService {
         return state.anyChange;
     }
 
-    //TODO data aktualizacji
     private void checkEstate(String url, State state) throws IOException {
 
         Document doc = Jsoup.connect(url).get();
         LOG.debug(doc.toString());
 
-        String phone = doc.select("strong.css-n1vsi7").first().text();
+        Flat flat = new Flat(state.kind, url);
 
-        String agent = doc.select("div.css-1rg48tw").first().ownText();
-        String agency = doc.select("li.css-1rwpoqh-Ia > strong").first().text();
-        BigDecimal price = service.getDetail(doc, "div.css-1vr19r7");
-        BigDecimal priceM2 = service.getDetail(doc, "div.css-zdpt2t");
-        BigDecimal livingArea = service.getDetail(doc, "div.css-1ci0qpi > ul > li > strong");
-
-        String details = doc.select("section.section-description").first().toString();
+        flat.setPhone(doc.select("strong.css-n1vsi7").first().text());
+        flat.setAgent(doc.select("div.css-1rg48tw").first().ownText());
+        flat.setAgency(doc.select("li.css-1rwpoqh-Ia > strong").first().text());
+        flat.setPrice(service.getDetail(doc, "div.css-1vr19r7"));
+        flat.setPriceM2(service.getDetail(doc, "div.css-zdpt2t"));
+        flat.setLivingArea(service.getDetail(doc, "div.css-1ci0qpi > ul > li > strong"));
+        flat.setContent(doc.select("section.section-description").first().toString());
 
         String estateIndexDiv = doc.select("div.css-kos6vh").first().text();
-        String estateIndex = service.find(estateIndexDiv, OTODOM_ID).replace(OTODOM_ID_PREFIX, "");
+        flat.setEstateIndex(service.find(estateIndexDiv, OTODOM_ID).replace(OTODOM_ID_PREFIX, ""));
 
-        service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, agent, agency, state);
+        String daysDiv = doc.select("div.css-lh1bxu").first().text();
+        String updateDays = service.find(daysDiv, UPDATE_DAYS).replace(UPDATE_DAYS_PREFIX, "");
+        flat.setUpdateDate(LocalDate.now().minusDays(Integer.valueOf(updateDays)));
+
+        service.checkEstate(flat, state);
     }
 }

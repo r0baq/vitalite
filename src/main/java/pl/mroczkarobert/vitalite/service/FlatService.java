@@ -35,25 +35,28 @@ public class FlatService {
         }
     }
 
-    public void checkEstate(String url, String content, String estateIndex, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, String agent, String agency, State state) {
-        LOG.info("Estate " + estateIndex);
-        state.processed.add(estateIndex);
+    public void checkEstate(Flat newFlat, State state) {
+        String index = newFlat.getEstateIndex();
+        LOG.info("Estate " + index);
+        state.processed.add(index);
 
-        Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(estateIndex, state.kind);
+        Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(index, state.kind);
         if (flat != null) {
             LOG.info("Found");
-            if (notChanged(flat, content, phone, price, priceM2, livingArea, agent, agency)) {
+            if (flat.equals(newFlat)) {
                 LOG.info("No changes");
 
             } else {
                 LOG.info("Changed!");
-                repo.save(new Flat(url, content, estateIndex, phone, price, priceM2, livingArea, agent, agency, Action.EDIT, state.kind));
+                newFlat.setAction(Action.EDIT);
+                repo.save(newFlat);
                 state.anyChange = true;
             }
 
         } else {
             LOG.info("New!");
-            repo.save(new Flat(url, content, estateIndex, phone, price, priceM2, livingArea, agent, agency, Action.NEW, state.kind));
+            newFlat.setAction(Action.NEW);
+            repo.save(newFlat);
             state.anyChange = true;
         }
     }
