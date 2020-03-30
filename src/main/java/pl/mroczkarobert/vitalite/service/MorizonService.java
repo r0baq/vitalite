@@ -88,7 +88,7 @@ public class MorizonService {
         details = replaceToday(details);
         details = replaceYesterday(details);
 
-        service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, state);
+        service.checkEstate(url, details, estateIndex, phone, price, priceM2, livingArea, null, null, state);
     }
 
     private String replaceToday(String details) {

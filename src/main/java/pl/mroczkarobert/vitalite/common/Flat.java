@@ -27,10 +27,12 @@ public class Flat {
     private BigDecimal price;
     private BigDecimal priceM2;
     private BigDecimal livingArea;
+    private String agent;
+    private String agency;
 
     public Flat() {}
 
-    public Flat(String url, String content, String estateIndex, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, Action action, Kind kind) {
+    public Flat(String url, String content, String estateIndex, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, String agent, String agency, Action action, Kind kind) {
         this.url = url;
         this.content = content;
         this.estateIndex = estateIndex;
@@ -40,6 +42,8 @@ public class Flat {
         this.price = price;
         this.priceM2 = priceM2;
         this.livingArea = livingArea;
+        this.agent = agent;
+        this.agency = agency;
     }
 
     public Flat(Flat flat, Action action) {
@@ -77,5 +81,13 @@ public class Flat {
 
     public BigDecimal getLivingArea() {
         return livingArea;
+    }
+
+    public String getAgent() {
+        return agent;
+    }
+
+    public String getAgency() {
+        return agency;
     }
 }
