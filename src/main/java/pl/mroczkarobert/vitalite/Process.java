@@ -25,16 +25,16 @@ public class Process {
 
     @PostConstruct
     public void init() throws IOException {
-//        boolean changedVitalite = vitaliteService.checkVitalite();
-//        boolean changedOutlet = vitaliteService.checkOutlet();
+        boolean changedVitalite = vitaliteService.checkVitalite();
+        boolean changedOutlet = vitaliteService.checkOutlet();
         boolean changedMorizon = morizonService.check();
-//        boolean changedOtodom = otodomService.check();
+        boolean changedOtodom = otodomService.check();
 
-//        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
-//            LOG.error("There were changes!");
-//
-//        } else {
-//            LOG.warn("No changes at all.");
-//        }
+        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
+            LOG.error("There were changes!");
+
+        } else {
+            LOG.warn("No changes at all.");
+        }
     }
 }
