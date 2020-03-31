@@ -32,6 +32,7 @@ public class Flat {
     private String agent;
     private String agency;
     private LocalDate updateDate;
+    private LocalDate publicationDate;
 
     public Flat() {}
 
@@ -54,6 +55,7 @@ public class Flat {
         this.agent = flat.agent;
         this.agency = flat.agency;
         this.updateDate = flat.updateDate;
+        this.publicationDate = flat.publicationDate;
     }
 
     @Override
@@ -63,17 +65,13 @@ public class Flat {
         Flat flat = (Flat) o;
         return content.equals(flat.content) &&
                 Objects.equals(phone, flat.phone) &&
-                Objects.equals(price, flat.price) &&
-                Objects.equals(priceM2, flat.priceM2) &&
-                Objects.equals(livingArea, flat.livingArea) &&
+                ((price == flat.price) || (price != null && price.compareTo(flat.price) == 0)) &&
+                ((priceM2 == flat.priceM2) || (priceM2 != null && priceM2.compareTo(flat.priceM2) == 0)) &&
+                ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0)) &&
                 Objects.equals(agent, flat.agent) &&
                 Objects.equals(agency, flat.agency) &&
-                Objects.equals(updateDate, flat.updateDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(content, phone, price, priceM2, livingArea, agent, agency, updateDate);
+                Objects.equals(updateDate, flat.updateDate) &&
+                Objects.equals(publicationDate, flat.publicationDate);
     }
 
     public String getContent() {
@@ -154,5 +152,9 @@ public class Flat {
 
     public void setUpdateDate(LocalDate updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public void setPublicationDate(LocalDate publicationDate) {
+        this.publicationDate = publicationDate;
     }
 }
