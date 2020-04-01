@@ -11,6 +11,8 @@ import pl.mroczkarobert.vitalite.common.Flat;
 import pl.mroczkarobert.vitalite.common.State;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,13 +25,20 @@ public class FlatService {
     private FlatRepository repo;
 
     public void checkDelete(State state) {
-        for(Flat flat : repo.findByKind(state.kind)) {
+        Set<String> processedInDelete = new HashSet<>();
+
+        for(Flat flat : repo.findByKindOrderByIdDesc(state.kind)) {
             String index = flat.getEstateIndex();
-            if (!state.processed.contains(index)) {
-                if (repo.findByEstateIndexAndActionAndKind(index, Action.DELETE, state.kind) == null) {
-                    LOG.info("Deleted!");
-                    repo.save(new Flat(flat, Action.DELETE));
-                    state.anyChange = true;
+
+            if (!processedInDelete.contains(index)) {
+                processedInDelete.add(index);
+
+                if (!state.processed.contains(index)) {
+                    if (repo.findByEstateIndexAndActionAndKind(index, Action.DELETE, state.kind) == null) {
+                        LOG.info("Deleted!");
+                        repo.save(new Flat(flat, Action.DELETE));
+                        state.anyChange = true;
+                    }
                 }
             }
         }
@@ -59,17 +68,6 @@ public class FlatService {
             repo.save(newFlat);
             state.anyChange = true;
         }
-    }
-
-    private boolean notChanged(Flat flat, String content, String phone, BigDecimal price, BigDecimal priceM2, BigDecimal livingArea, String agent, String agency) {
-        return
-            content.equals(flat.getContent())
-            && ((phone == null && flat.getPhone() == null) || phone.equals(flat.getPhone()))
-            && ((price == null && flat.getPrice() == null) || price.compareTo(flat.getPrice()) == 0)
-            && ((priceM2 == null && flat.getPriceM2() == null) || priceM2.compareTo(flat.getPriceM2()) == 0)
-            && ((livingArea == null && flat.getLivingArea() == null) || livingArea.compareTo(flat.getLivingArea()) == 0)
-            && ((agent == null && flat.getAgent() == null) || agent.compareTo(flat.getAgent()) == 0)
-            && ((agency == null && flat.getAgency() == null) || agency.compareTo(flat.getAgency()) == 0);
     }
 
     public void startReport(State state) {
