@@ -102,6 +102,9 @@ public class MorizonService {
 
         flat.setContent(details);
 
+        flat.setAgent(doc.select("div.agentName").first().text());
+        flat.setAgency(doc.select("div.companyName").first().text());
+
         service.checkEstate(flat, state);
     }
 
