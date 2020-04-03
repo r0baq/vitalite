@@ -7,9 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.mroczkarobert.vitalite.common.Flat;
-import pl.mroczkarobert.vitalite.common.Kind;
-import pl.mroczkarobert.vitalite.common.State;
+import pl.mroczkarobert.vitalite.UrlRepository;
+import pl.mroczkarobert.vitalite.common.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -27,63 +26,37 @@ public class MorizonService {
     @Autowired
     private FlatService service;
 
+    @Autowired
+    private UrlRepository urlRepository;
+
     public boolean check() throws IOException {
         State state = new State(Kind.MORIZON);
         service.startReport(state);
 
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035929730", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035999835", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036084941", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036056741", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2035995336", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035995345", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-71m2-mzn2035995348", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2036086103", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-zygmunta-vogla-62m2-mzn2035746454", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-61m2-mzn2035987241", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-hektarowa-62m2-mzn2035990677", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987242", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-glebowa-62m2-mzn2035987245", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033717168", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033718261", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033668086", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-56m2-mzn2035995346", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2035404431", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-56m2-mzn2035404430", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-62m2-mzn2035404432", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-62m2-mzn2033654864", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035536687", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2035437185", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-syta-61m2-mzn2033578390", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-56m2-mzn2035417695", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2034760968", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417696", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-62m2-mzn2035417689", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2033528456", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-71m2-mzn2035417693", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-61m2-mzn2033646418", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2033528463", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-wilanow-zawady-61m2-mzn2034760969", state);
-        checkMorizonEstate("https://www.morizon.pl/oferta/sprzedaz-mieszkanie-warszawa-wilanow-tuzinowa-61m2-mzn2035262522", state);
+        for (Url url : urlRepository.findByStatusAndKind(Status.ACTIVE, state.kind)) {
+            checkMorizonEstate(url, state);
+        }
 
         service.checkDelete(state);
         service.endReport(state);
         return state.anyChange;
     }
 
-    private void checkMorizonEstate(String url, State state) throws IOException {
+    private void checkMorizonEstate(Url url, State state) throws IOException {
 
-        Document doc = Jsoup.connect(url).get();
+        Document doc = Jsoup.connect(url.getUrl()).get();
         LOG.debug(doc.toString());
 
         Element phone = doc.select("span.phone.hidden").first();
 
         if (phone == null) {
-            LOG.info("Gone! " + url);
+            LOG.info("Gone! " + url.getUrl());
+            url.setStatus(Status.INACTIVE);
+            urlRepository.save(url);
             return;
         }
 
-        Flat flat = new Flat(state.kind, url);
+        Flat flat = new Flat(state.kind, url.getUrl());
 
         flat.setPhone(phone.text());
         flat.setPrice(service.getDetail(doc, "li.paramIconPrice > em"));

@@ -49,7 +49,7 @@ public class OtodomService {
 
         flat.setPhone(doc.select("strong.css-n1vsi7").first().text());
         flat.setAgent(doc.select("div.css-1rg48tw").first().ownText());
-        flat.setAgency(doc.select("li.css-1rwpoqh-Ia > strong").first().text());
+        flat.setAgency(doc.select("li.css-1uzc6ks > strong").first().text());
         flat.setPrice(service.getDetail(doc, "div.css-1vr19r7"));
         flat.setPriceM2(service.getDetail(doc, "div.css-zdpt2t"));
         flat.setLivingArea(service.getDetail(doc, "div.css-1ci0qpi > ul > li > strong"));
