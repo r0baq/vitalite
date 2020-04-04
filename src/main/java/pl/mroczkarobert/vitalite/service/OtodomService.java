@@ -26,6 +26,9 @@ public class OtodomService {
     private static final String UPDATE_DAYS_PREFIX = "Data aktualizacji: ";
     private static final Pattern UPDATE_DAYS = Pattern.compile(UPDATE_DAYS_PREFIX + "\\d*");
 
+    private static final String PUBLICATION_DAYS_PREFIX = "Data dodania: ";
+    private static final Pattern PUBLICATION_DAYS = Pattern.compile(PUBLICATION_DAYS_PREFIX + "\\d*");
+
     @Autowired
     private FlatService service;
 
@@ -59,8 +62,12 @@ public class OtodomService {
         flat.setEstateIndex(service.find(estateIndexDiv, OTODOM_ID).replace(OTODOM_ID_PREFIX, ""));
 
         String daysDiv = doc.select("div.css-lh1bxu").first().text();
+
         String updateDays = service.find(daysDiv, UPDATE_DAYS).replace(UPDATE_DAYS_PREFIX, "");
         flat.setUpdateDate(LocalDate.now().minusDays(Integer.valueOf(updateDays)));
+
+        String publicationDays = service.find(daysDiv, PUBLICATION_DAYS).replace(PUBLICATION_DAYS_PREFIX, "");
+        flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
 
         service.checkEstate(flat, state);
     }
