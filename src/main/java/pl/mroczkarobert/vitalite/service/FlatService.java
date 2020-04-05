@@ -100,4 +100,14 @@ public class FlatService {
             throw new RuntimeException("Nie znaleziono w ofercie: " + pattern);
         }
     }
+
+    public String findOrNull(String details, Pattern pattern) {
+        Matcher matcher = pattern.matcher(details);
+        if (matcher.find()) {
+            return matcher.group(0);
+
+        } else {
+            return null;
+        }
+    }
 }

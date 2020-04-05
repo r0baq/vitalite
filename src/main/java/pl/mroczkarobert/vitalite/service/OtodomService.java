@@ -18,11 +18,14 @@ public class OtodomService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MorizonService.class);
 
-    private static final String OTODOM_ID_PREFIX = "Nr oferty w biurze nieruchomości: ";
+    private static final String AGENCY_ID_PREFIX = "Nr oferty w biurze nieruchomości: ";
+    private static final Pattern AGENCY_ID = Pattern.compile(AGENCY_ID_PREFIX + "\\S*");
+
+    private static final String OTODOM_ID_PREFIX = "Nr oferty w Otodom: ";
     private static final Pattern OTODOM_ID = Pattern.compile(OTODOM_ID_PREFIX + "\\S*");
 
     private static final String UPDATE_DAYS_PREFIX = "Data aktualizacji: ";
-    private static final Pattern UPDATE_DAYS = Pattern.compile(UPDATE_DAYS_PREFIX + "\\d*");
+    private static final Pattern UPDATE_DAYS = Pattern.compile(UPDATE_DAYS_PREFIX + "\\d{1,2}");
 
     private static final String PUBLICATION_DAYS_PREFIX = "Data dodania: ";
     private static final Pattern PUBLICATION_DAYS = Pattern.compile(PUBLICATION_DAYS_PREFIX + "\\d*");
@@ -61,12 +64,24 @@ public class OtodomService {
         flat.setContent(doc.select("section.section-description").first().toString());
 
         String estateIndexDiv = doc.select("div.css-kos6vh").first().text();
-        flat.setEstateIndex(service.find(estateIndexDiv, OTODOM_ID).replace(OTODOM_ID_PREFIX, ""));
+        String agencyId = service.findOrNull(estateIndexDiv, AGENCY_ID);
+        if (agencyId != null) {
+            flat.setEstateIndex(agencyId.replace(AGENCY_ID_PREFIX, ""));
+
+        } else {
+            String otodomId = service.find(estateIndexDiv, OTODOM_ID);
+            flat.setEstateIndex(otodomId.replace(OTODOM_ID_PREFIX, "otodom-"));
+        }
 
         String daysDiv = doc.select("div.css-lh1bxu").first().text();
 
-        String updateDays = service.find(daysDiv, UPDATE_DAYS).replace(UPDATE_DAYS_PREFIX, "");
-        flat.setUpdateDate(LocalDate.now().minusDays(Integer.valueOf(updateDays)));
+        String updateDays = service.findOrNull(daysDiv, UPDATE_DAYS);
+        if (updateDays != null) {
+            flat.setUpdateDate(LocalDate.now().minusDays(Integer.valueOf(updateDays.replace(UPDATE_DAYS_PREFIX, ""))));
+
+        } else {
+            flat.setUpdateDate(LocalDate.now());
+        }
 
         String publicationDays = service.find(daysDiv, PUBLICATION_DAYS).replace(PUBLICATION_DAYS_PREFIX, "");
         flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
