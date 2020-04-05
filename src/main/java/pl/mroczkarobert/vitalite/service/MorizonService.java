@@ -25,7 +25,6 @@ public class MorizonService {
 
     @Autowired
     private FlatService service;
-
     @Autowired
     private UrlRepository urlRepository;
 

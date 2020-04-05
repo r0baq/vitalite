@@ -6,12 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.mroczkarobert.vitalite.common.Flat;
-import pl.mroczkarobert.vitalite.common.Kind;
-import pl.mroczkarobert.vitalite.common.State;
+import pl.mroczkarobert.vitalite.UrlRepository;
+import pl.mroczkarobert.vitalite.common.*;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.regex.Pattern;
 
@@ -31,12 +29,16 @@ public class OtodomService {
 
     @Autowired
     private FlatService service;
+    @Autowired
+    private UrlRepository urlRepository;
 
     public boolean check() throws IOException {
         State state = new State(Kind.OTODOM);
         service.startReport(state);
 
-        checkEstate("https://www.otodom.pl/oferta/rabaty-duze-system-30-70-zostanwdomu-ID45g2q.html#4856509129", state);
+        for (Url url : urlRepository.findByStatusAndKind(Status.ACTIVE, state.kind)) {
+            checkEstate(url.getUrl(), state);
+        }
 
         service.checkDelete(state);
         service.endReport(state);
