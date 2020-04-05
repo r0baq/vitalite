@@ -2,6 +2,7 @@ package pl.mroczkarobert.vitalite.service;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import pl.mroczkarobert.vitalite.common.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 
 @Service
@@ -87,5 +89,22 @@ public class OtodomService {
         flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
 
         service.checkEstate(flat, state);
+    }
+
+    public void findNew() throws IOException {
+
+        Document doc = Jsoup.connect(
+        "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/wilanow/" +
+                "?search[filter_enum_rooms_num][0]=3&search[filter_enum_market]=primary&search[filter_float_building_floors_num:to]=3&search[region_id]=7&search[subregion_id]=197" +
+                "&search[city_id]=26&search[district_id]=50"
+        )
+        .get();
+        LOG.debug(doc.toString());
+
+        Iterator<Element> iterator = doc.select("article").iterator();
+        while (iterator.hasNext()) {
+            Element article = iterator.next();
+            LOG.info("RMR01 " + article.attr("data-url"));
+        }
     }
 }
