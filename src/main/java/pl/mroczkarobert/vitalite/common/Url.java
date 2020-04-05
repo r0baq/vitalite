@@ -13,6 +13,15 @@ public class Url {
     private Status status;
     private Kind kind;
 
+    public Url() {
+    }
+
+    public Url(String url, Kind kind) {
+        this.url = url;
+        this.kind = kind;
+        this.status = Status.ACTIVE;
+    }
+
     public String getUrl() {
         return url;
     }

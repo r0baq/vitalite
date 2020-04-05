@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface UrlRepository extends CrudRepository<Url, Long> {
     List<Url> findByStatusAndKind(Status status, Kind kind);
+    Url findByUrl(String url);
 }

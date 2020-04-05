@@ -70,7 +70,7 @@ public class Flat {
                 ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0)) &&
                 Objects.equals(agent, flat.agent) &&
                 Objects.equals(agency, flat.agency) &&
-                Objects.equals(updateDate, flat.updateDate) &&
+                (Objects.equals(updateDate, flat.updateDate) || Objects.equals(updateDate.minusDays(1), flat.updateDate)) &&
                 Objects.equals(publicationDate, flat.publicationDate);
     }
 

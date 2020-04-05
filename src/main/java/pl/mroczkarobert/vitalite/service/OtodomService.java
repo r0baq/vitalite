@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 public class OtodomService {
 
     private static final Logger LOG = LoggerFactory.getLogger(MorizonService.class);
+    private static final Kind KIND = Kind.OTODOM;
 
     private static final String AGENCY_ID_PREFIX = "Nr oferty w biurze nieruchomości: ";
     private static final Pattern AGENCY_ID = Pattern.compile(AGENCY_ID_PREFIX + "\\S*");
@@ -38,10 +39,10 @@ public class OtodomService {
     private UrlRepository urlRepository;
 
     public boolean check() throws IOException {
-        State state = new State(Kind.OTODOM);
+        State state = new State(KIND);
         service.startReport(state);
 
-        for (Url url : urlRepository.findByStatusAndKind(Status.ACTIVE, state.kind)) {
+        for (Url url : urlRepository.findByStatusAndKind(Status.ACTIVE, KIND)) {
             checkEstate(url.getUrl(), state);
         }
 
@@ -59,11 +60,15 @@ public class OtodomService {
 
         flat.setPhone(doc.select("strong.css-n1vsi7").first().text());
         flat.setAgent(doc.select("div.css-1rg48tw").first().ownText());
-        flat.setAgency(doc.select("li.css-1uzc6ks > strong").first().text());
         flat.setPrice(service.getDetail(doc, "div.css-1vr19r7"));
         flat.setPriceM2(service.getDetail(doc, "div.css-zdpt2t"));
         flat.setLivingArea(service.getDetail(doc, "div.css-1ci0qpi > ul > li > strong"));
         flat.setContent(doc.select("section.section-description").first().toString());
+
+        Element agency = doc.select("li.css-1uzc6ks > strong").first();
+        if (agency != null) {
+            flat.setAgency(agency.text());
+        }
 
         String estateIndexDiv = doc.select("div.css-kos6vh").first().text();
         String agencyId = service.findOrNull(estateIndexDiv, AGENCY_ID);
@@ -92,19 +97,37 @@ public class OtodomService {
     }
 
     public void findNew() throws IOException {
+        LOG.info("Looking for new flats");
 
-        Document doc = Jsoup.connect(
-        "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/wilanow/" +
+        String baseUrl =
+            "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/wilanow/" +
                 "?search[filter_enum_rooms_num][0]=3&search[filter_enum_market]=primary&search[filter_float_building_floors_num:to]=3&search[region_id]=7&search[subregion_id]=197" +
-                "&search[city_id]=26&search[district_id]=50"
-        )
-        .get();
-        LOG.debug(doc.toString());
+                "&search[city_id]=26&search[district_id]=50";
 
+        Document firstPage = Jsoup.connect(baseUrl).get();
+        LOG.debug(firstPage.toString());
+        saveAllNew(firstPage);
+
+        Document secondPage = Jsoup.connect(baseUrl + "&page=2").get();
+        LOG.debug(secondPage.toString());
+        saveAllNew(secondPage);
+
+        LOG.info("Looking for new flats ended");
+    }
+
+    private void saveAllNew(Document doc) {
         Iterator<Element> iterator = doc.select("article").iterator();
         while (iterator.hasNext()) {
+
             Element article = iterator.next();
-            LOG.info("RMR01 " + article.attr("data-url"));
+            String url = article.attr("data-url");
+            int hashIndex = url.indexOf("#");
+            String urlWithoutHash = url.substring(0, hashIndex);
+
+            if (urlRepository.findByUrl(urlWithoutHash) == null) {
+                LOG.info("New offer found {}", url);
+                urlRepository.save(new Url(urlWithoutHash, KIND));
+            }
         }
     }
 }

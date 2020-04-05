@@ -27,16 +27,16 @@ public class Process {
     public void init() throws IOException {
         otodomService.findNew();
 
-//        boolean changedVitalite = vitaliteService.checkVitalite();
-//        boolean changedOutlet = vitaliteService.checkOutlet();
-//        boolean changedMorizon = morizonService.check();
-//        boolean changedOtodom = otodomService.check();
-//
-//        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
-//            LOG.error("There were changes!");
-//
-//        } else {
-//            LOG.warn("No changes at all.");
-//        }
+        boolean changedVitalite = vitaliteService.checkVitalite();
+        boolean changedOutlet = vitaliteService.checkOutlet();
+        boolean changedMorizon = morizonService.check();
+        boolean changedOtodom = otodomService.check();
+
+        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
+            LOG.error("There were changes!");
+
+        } else {
+            LOG.warn("No changes at all.");
+        }
     }
 }
