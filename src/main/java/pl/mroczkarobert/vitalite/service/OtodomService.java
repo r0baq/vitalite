@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import pl.mroczkarobert.vitalite.UrlRepository;
 import pl.mroczkarobert.vitalite.common.*;
 
@@ -43,7 +44,7 @@ public class OtodomService {
         service.startReport(state);
 
         for (Url url : urlRepository.findByStatusAndKind(Status.ACTIVE, KIND)) {
-            checkEstate(url.getUrl(), state);
+            checkEstate(url, state);
         }
 
         service.checkDelete(state);
@@ -51,14 +52,24 @@ public class OtodomService {
         return state.anyChange;
     }
 
-    private void checkEstate(String url, State state) throws IOException {
+    private void checkEstate(Url url, State state) throws IOException {
+        LOG.info("Checking {}", url.getUrl());
 
-        Document doc = Jsoup.connect(url).get();
+        Document doc = Jsoup.connect(url.getUrl()).get();
         LOG.debug(doc.toString());
 
-        Flat flat = new Flat(state.kind, url);
+        Element phone = doc.select("strong.css-n1vsi7").first();
 
-        flat.setPhone(doc.select("strong.css-n1vsi7").first().text());
+        if (phone == null) {
+            LOG.info("Gone! " + url.getUrl());
+            url.setStatus(Status.INACTIVE);
+            urlRepository.save(url);
+            return;
+        }
+
+        Flat flat = new Flat(state.kind, url.getUrl());
+
+        flat.setPhone(phone.text());
         flat.setAgent(doc.select("div.css-1rg48tw").first().ownText());
         flat.setPrice(service.getDetail(doc, "div.css-1vr19r7"));
         flat.setPriceM2(service.getDetail(doc, "div.css-zdpt2t"));
@@ -91,7 +102,12 @@ public class OtodomService {
         }
 
         String publicationDays = service.find(daysDiv, PUBLICATION_DAYS).replace(PUBLICATION_DAYS_PREFIX, "");
-        flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
+        if (StringUtils.isEmpty(publicationDays)) {
+            flat.setPublicationDate(LocalDate.now().minusDays(30));
+
+        } else {
+            flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
+        }
 
         service.checkEstate(flat, state);
     }

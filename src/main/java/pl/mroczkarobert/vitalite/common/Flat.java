@@ -70,8 +70,12 @@ public class Flat {
                 ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0)) &&
                 Objects.equals(agent, flat.agent) &&
                 Objects.equals(agency, flat.agency) &&
-                (Objects.equals(updateDate, flat.updateDate) || Objects.equals(updateDate.minusDays(1), flat.updateDate)) &&
-                Objects.equals(publicationDate, flat.publicationDate);
+                equalsCircaOneDay(updateDate, flat.updateDate) &&
+                equalsCircaOneDay(publicationDate, flat.publicationDate);
+    }
+
+    private boolean equalsCircaOneDay(LocalDate first, LocalDate second) {
+        return Objects.equals(first, second) || Objects.equals(first.minusDays(1), second) || Objects.equals(first.plusDays(1), second);
     }
 
     public String getContent() {
