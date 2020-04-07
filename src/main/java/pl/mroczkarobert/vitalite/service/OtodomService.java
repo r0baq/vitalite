@@ -14,6 +14,7 @@ import pl.mroczkarobert.vitalite.common.*;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Iterator;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -31,8 +32,12 @@ public class OtodomService {
     private static final String UPDATE_DAYS_PREFIX = "Data aktualizacji: ";
     private static final Pattern UPDATE_DAYS = Pattern.compile(UPDATE_DAYS_PREFIX + "\\d{1,2}");
 
-    private static final String PUBLICATION_DAYS_PREFIX = "Data dodania: ";
-    private static final Pattern PUBLICATION_DAYS = Pattern.compile(PUBLICATION_DAYS_PREFIX + "\\d*");
+    private static final String PUBLICATION_PREFIX = "Data dodania: ";
+
+    private static final String PUBLICATION_DAYS_SUFFIX = " dni temu";
+    private static final Pattern PUBLICATION_DAYS = Pattern.compile(PUBLICATION_PREFIX + "\\d*" + PUBLICATION_DAYS_SUFFIX);
+
+    private static final Pattern PUBLICATION_MONTHS = Pattern.compile(PUBLICATION_PREFIX + "\\d* miesi.c. temu");
 
     @Autowired
     private FlatService service;
@@ -101,15 +106,28 @@ public class OtodomService {
             flat.setUpdateDate(LocalDate.now());
         }
 
-        String publicationDays = service.find(daysDiv, PUBLICATION_DAYS).replace(PUBLICATION_DAYS_PREFIX, "");
-        if (StringUtils.isEmpty(publicationDays)) {
-            flat.setPublicationDate(LocalDate.now().minusDays(30));
-
-        } else {
-            flat.setPublicationDate(LocalDate.now().minusDays(Integer.valueOf(publicationDays)));
-        }
+        flat.setPublicationDate(getPublicationDays(daysDiv));
 
         service.checkEstate(flat, state);
+    }
+
+    private LocalDate getPublicationDays(String daysDiv) {
+
+        String publicationDays = service.findOrNull(daysDiv, PUBLICATION_DAYS);
+
+        if (StringUtils.isEmpty(publicationDays)) {
+            String publicationMonths = service.findOrNull(daysDiv, PUBLICATION_MONTHS);
+
+            if (StringUtils.isEmpty(publicationMonths)) {
+                return LocalDate.now().minusDays(30);
+
+            } else {
+                return LocalDate.now().minusMonths(Integer.valueOf(publicationMonths.replaceAll("\\D+","")));
+            }
+
+        } else {
+            return LocalDate.now().minusDays(Integer.valueOf(publicationDays.replace(PUBLICATION_PREFIX, "").replace(PUBLICATION_DAYS_SUFFIX, "")));
+        }
     }
 
     public void findNew() throws IOException {
