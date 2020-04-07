@@ -33,6 +33,7 @@ public class Flat {
     private String agency;
     private LocalDate updateDate;
     private LocalDate publicationDate;
+    private String location;
 
     public Flat() {}
 
@@ -56,6 +57,7 @@ public class Flat {
         this.agency = flat.agency;
         this.updateDate = flat.updateDate;
         this.publicationDate = flat.publicationDate;
+        this.location = flat.location;
     }
 
     @Override
@@ -70,6 +72,7 @@ public class Flat {
                 ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0)) &&
                 Objects.equals(agent, flat.agent) &&
                 Objects.equals(agency, flat.agency) &&
+                //RMR Objects.equals(location, flat.location) &&
                 equalsCircaOneDay(updateDate, flat.updateDate) &&
                 equalsCircaOneDay(publicationDate, flat.publicationDate);
     }
@@ -160,5 +163,9 @@ public class Flat {
 
     public void setPublicationDate(LocalDate publicationDate) {
         this.publicationDate = publicationDate;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

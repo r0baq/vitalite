@@ -1,5 +1,6 @@
 package pl.mroczkarobert.vitalite.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,14 +8,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import pl.mroczkarobert.vitalite.UrlRepository;
 import pl.mroczkarobert.vitalite.common.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Iterator;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
@@ -107,8 +106,18 @@ public class OtodomService {
         }
 
         flat.setPublicationDate(getPublicationDays(daysDiv));
+        fillLocation(flat);
 
         service.checkEstate(flat, state);
+    }
+
+    private void fillLocation(Flat flat) {
+        if (StringUtils.containsIgnoreCase(flat.getContent(), "spa") || StringUtils.containsIgnoreCase(flat.getContent(), "syta")) {
+            flat.setLocation("Vitalite");
+
+        } else {
+            flat.setLocation("Wilanów");
+        }
     }
 
     private LocalDate getPublicationDays(String daysDiv) {
