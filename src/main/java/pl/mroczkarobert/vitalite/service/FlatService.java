@@ -57,6 +57,7 @@ public class FlatService {
 
             } else {
                 LOG.info("Changed!");
+                newFlat.setComment(buildComment(flat, newFlat));
                 newFlat.setAction(Action.EDIT);
                 repo.save(newFlat);
                 state.anyChange = true;
@@ -68,6 +69,37 @@ public class FlatService {
             repo.save(newFlat);
             state.anyChange = true;
         }
+    }
+
+    private String buildComment(Flat flat, Flat newFlat) {
+        StringBuilder builder = new StringBuilder();
+
+        if (!flat.contentEquals(newFlat)) {
+            builder.append("Zmiana w treści. ");
+        }
+        if (!flat.phoneEquals(newFlat)) {
+            builder.append("Zmiana numeru telefonu. ");
+        }
+        if (!flat.priceEquals(newFlat)) {
+            builder.append("Zmiana ceny. ");
+        }
+        if (!flat.priceM2Equals(newFlat)) {
+            builder.append("Zmiana ceny za metr. ");
+        }
+        if (!flat.livingAreaEquals(newFlat)) {
+            builder.append("Zmiana metrażu. ");
+        }
+        if (!flat.agentEquals(newFlat)) {
+            builder.append("Zmiana agenta. ");
+        }
+        if (!flat.agencyEquals(newFlat)) {
+            builder.append("Zmiana agencji. ");
+        }
+        if (!flat.agencyEquals(newFlat)) {
+            builder.append("Zmiana daty aktualizacji. ");
+        }
+
+        return builder.toString();
     }
 
     public void startReport(State state) {

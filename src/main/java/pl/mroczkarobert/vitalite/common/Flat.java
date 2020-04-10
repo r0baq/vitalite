@@ -65,16 +65,47 @@ public class Flat {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Flat flat = (Flat) o;
-        return content.equals(flat.content) &&
-                Objects.equals(phone, flat.phone) &&
-                ((price == flat.price) || (price != null && price.compareTo(flat.price) == 0)) &&
-                ((priceM2 == flat.priceM2) || (priceM2 != null && priceM2.compareTo(flat.priceM2) == 0)) &&
-                ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0)) &&
-                Objects.equals(agent, flat.agent) &&
-                Objects.equals(agency, flat.agency) &&
-                //RMR Objects.equals(location, flat.location) &&
-                equalsCircaOneDay(updateDate, flat.updateDate) &&
-                equalsCircaOneDay(publicationDate, flat.publicationDate);
+        return
+                contentEquals(flat) &&
+                phoneEquals(flat) &&
+                priceEquals(flat) &&
+                priceM2Equals(flat) &&
+                livingAreaEquals(flat) &&
+                agentEquals(flat) &&
+                agencyEquals(flat) &&
+                updateDateEquals(flat);
+    }
+
+    public boolean updateDateEquals(Flat flat) {
+        return equalsCircaOneDay(updateDate, flat.updateDate);
+    }
+
+    public boolean agencyEquals(Flat flat) {
+        return Objects.equals(agency, flat.agency);
+    }
+
+    public boolean agentEquals(Flat flat) {
+        return Objects.equals(agent, flat.agent);
+    }
+
+    public boolean livingAreaEquals(Flat flat) {
+        return ((livingArea == flat.livingArea) || (livingArea != null && livingArea.compareTo(flat.livingArea) == 0));
+    }
+
+    public boolean priceM2Equals(Flat flat) {
+        return ((priceM2 == flat.priceM2) || (priceM2 != null && priceM2.compareTo(flat.priceM2) == 0));
+    }
+
+    public boolean priceEquals(Flat flat) {
+        return ((price == flat.price) || (price != null && price.compareTo(flat.price) == 0));
+    }
+
+    public boolean contentEquals(Flat flat) {
+        return content.equals(flat.content);
+    }
+
+    public boolean phoneEquals(Flat flat) {
+        return Objects.equals(phone, flat.phone);
     }
 
     private boolean equalsCircaOneDay(LocalDate first, LocalDate second) {
@@ -167,5 +198,9 @@ public class Flat {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
