@@ -37,6 +37,7 @@ public class OtodomService {
     private static final Pattern PUBLICATION_DAYS = Pattern.compile(PUBLICATION_PREFIX + "\\d*" + PUBLICATION_DAYS_SUFFIX);
 
     private static final Pattern PUBLICATION_MONTHS = Pattern.compile(PUBLICATION_PREFIX + "\\d* miesi.c. temu");
+    private static final Pattern PUBLICATION_HOURS = Pattern.compile(PUBLICATION_PREFIX + "około \\d{1,2} godzin temu");
 
     @Autowired
     private FlatService service;
@@ -105,14 +106,16 @@ public class OtodomService {
             flat.setUpdateDate(LocalDate.now());
         }
 
-        flat.setPublicationDate(getPublicationDays(daysDiv));
+        flat.setPublicationDate(getPublicationDate(daysDiv));
         fillLocation(flat);
 
         service.checkEstate(flat, state);
     }
 
+    private static final Pattern SPA = Pattern.compile("\\b[Ss][Pp][Aa]\\b");
+
     private void fillLocation(Flat flat) {
-        if (StringUtils.containsIgnoreCase(flat.getContent(), "spa") || StringUtils.containsIgnoreCase(flat.getContent(), "syta")) {
+        if (service.findBoolean(flat.getContent(), SPA) || StringUtils.containsIgnoreCase(flat.getContent(), "syta")) {
             flat.setLocation("Vitalite");
 
         } else {
@@ -120,7 +123,7 @@ public class OtodomService {
         }
     }
 
-    private LocalDate getPublicationDays(String daysDiv) {
+    private LocalDate getPublicationDate(String daysDiv) {
 
         String publicationDays = service.findOrNull(daysDiv, PUBLICATION_DAYS);
 
@@ -128,7 +131,14 @@ public class OtodomService {
             String publicationMonths = service.findOrNull(daysDiv, PUBLICATION_MONTHS);
 
             if (StringUtils.isEmpty(publicationMonths)) {
-                return LocalDate.now().minusDays(30);
+                String publicationHours = service.findOrNull(daysDiv, PUBLICATION_HOURS);
+
+                if (StringUtils.isEmpty(publicationHours)) {
+                    return LocalDate.now().minusDays(30);
+
+                } else {
+                    return LocalDate.now();
+                }
 
             } else {
                 return LocalDate.now().minusMonths(Integer.valueOf(publicationMonths.replaceAll("\\D+","")));

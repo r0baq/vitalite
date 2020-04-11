@@ -95,7 +95,7 @@ public class FlatService {
         if (!flat.agencyEquals(newFlat)) {
             builder.append("Zmiana agencji. ");
         }
-        if (!flat.agencyEquals(newFlat)) {
+        if (!flat.updateDateEquals(newFlat)) {
             builder.append("Zmiana daty aktualizacji. ");
         }
 
@@ -141,5 +141,9 @@ public class FlatService {
         } else {
             return null;
         }
+    }
+
+    public boolean findBoolean(String details, Pattern pattern) {
+        return findOrNull(details, pattern) != null;
     }
 }
