@@ -1,5 +1,6 @@
 package pl.mroczkarobert.vitalite.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,10 +45,14 @@ public class FlatService {
         }
     }
 
+    private static final Pattern SPA = Pattern.compile("\\b[Ss][Pp][Aa]\\b");
+
     public void checkEstate(Flat newFlat, State state) {
         String index = newFlat.getEstateIndex();
         LOG.info("Estate " + index);
         state.processed.add(index);
+
+        fillLocation(newFlat);
 
         Flat flat = repo.findFirstByEstateIndexAndKindOrderByIdDesc(index, state.kind);
         if (flat != null) {
@@ -68,6 +73,15 @@ public class FlatService {
             newFlat.setAction(Action.NEW);
             repo.save(newFlat);
             state.anyChange = true;
+        }
+    }
+
+    private void fillLocation(Flat flat) {
+        if (findBoolean(flat.getContent(), SPA) || StringUtils.containsIgnoreCase(flat.getContent(), "syta")) {
+            flat.setLocation("Vitalite");
+
+        } else {
+            flat.setLocation("Wilanów");
         }
     }
 

@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import pl.mroczkarobert.vitalite.service.MorizonService;
-import pl.mroczkarobert.vitalite.service.OtodomService;
-import pl.mroczkarobert.vitalite.service.VitaliteService;
+import pl.mroczkarobert.vitalite.service.*;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -23,9 +21,15 @@ public class Process {
     @Autowired
     private OtodomService otodomService;
 
+    @Autowired
+    private OtodomSearchNewService otodomSearchNewService;
+    @Autowired
+    private MorizonSearchNewService morizonSearchNewService;
+
     @PostConstruct
     public void init() throws IOException {
-        otodomService.findNew();
+        otodomSearchNewService.findNew();
+        morizonSearchNewService.findNew();
 
         boolean changedVitalite = vitaliteService.checkVitalite();
         boolean changedOutlet = vitaliteService.checkOutlet();

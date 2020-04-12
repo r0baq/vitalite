@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @Service
 public class OtodomService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MorizonService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(OtodomService.class);
     private static final Kind KIND = Kind.OTODOM;
 
     private static final String AGENCY_ID_PREFIX = "Nr oferty w biurze nieruchomości: ";
@@ -107,20 +107,8 @@ public class OtodomService {
         }
 
         flat.setPublicationDate(getPublicationDate(daysDiv));
-        fillLocation(flat);
 
         service.checkEstate(flat, state);
-    }
-
-    private static final Pattern SPA = Pattern.compile("\\b[Ss][Pp][Aa]\\b");
-
-    private void fillLocation(Flat flat) {
-        if (service.findBoolean(flat.getContent(), SPA) || StringUtils.containsIgnoreCase(flat.getContent(), "syta")) {
-            flat.setLocation("Vitalite");
-
-        } else {
-            flat.setLocation("Wilanów");
-        }
     }
 
     private LocalDate getPublicationDate(String daysDiv) {
@@ -146,41 +134,6 @@ public class OtodomService {
 
         } else {
             return LocalDate.now().minusDays(Integer.valueOf(publicationDays.replace(PUBLICATION_PREFIX, "").replace(PUBLICATION_DAYS_SUFFIX, "")));
-        }
-    }
-
-    public void findNew() throws IOException {
-        LOG.info("Looking for new flats");
-
-        String baseUrl =
-            "https://www.otodom.pl/sprzedaz/mieszkanie/warszawa/wilanow/" +
-                "?search[filter_enum_rooms_num][0]=3&search[filter_enum_market]=primary&search[filter_float_building_floors_num:to]=3&search[region_id]=7&search[subregion_id]=197" +
-                "&search[city_id]=26&search[district_id]=50";
-
-        Document firstPage = Jsoup.connect(baseUrl).get();
-        LOG.debug(firstPage.toString());
-        saveAllNew(firstPage);
-
-        Document secondPage = Jsoup.connect(baseUrl + "&page=2").get();
-        LOG.debug(secondPage.toString());
-        saveAllNew(secondPage);
-
-        LOG.info("Looking for new flats ended");
-    }
-
-    private void saveAllNew(Document doc) {
-        Iterator<Element> iterator = doc.select("article").iterator();
-        while (iterator.hasNext()) {
-
-            Element article = iterator.next();
-            String url = article.attr("data-url");
-            int hashIndex = url.indexOf("#");
-            String urlWithoutHash = url.substring(0, hashIndex);
-
-            if (urlRepository.findByUrl(urlWithoutHash) == null) {
-                LOG.info("New offer found {}", url);
-                urlRepository.save(new Url(urlWithoutHash, KIND));
-            }
         }
     }
 }
