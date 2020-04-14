@@ -67,7 +67,6 @@ public class Flat {
         Flat flat = (Flat) o;
         return
                 contentEquals(flat) &&
-                phoneEquals(flat) &&
                 priceEquals(flat) &&
                 priceM2Equals(flat) &&
                 livingAreaEquals(flat) &&
@@ -102,10 +101,6 @@ public class Flat {
 
     public boolean contentEquals(Flat flat) {
         return content.equals(flat.content);
-    }
-
-    public boolean phoneEquals(Flat flat) {
-        return Objects.equals(phone, flat.phone);
     }
 
     private boolean equalsCircaOneDay(LocalDate first, LocalDate second) {

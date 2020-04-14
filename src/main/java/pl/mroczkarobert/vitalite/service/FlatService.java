@@ -91,9 +91,6 @@ public class FlatService {
         if (!flat.contentEquals(newFlat)) {
             builder.append("Zmiana w treści. ");
         }
-        if (!flat.phoneEquals(newFlat)) {
-            builder.append("Zmiana numeru telefonu. ");
-        }
         if (!flat.priceEquals(newFlat)) {
             builder.append("Zmiana ceny. ");
         }
