@@ -42,6 +42,7 @@ public class MorizonService {
     }
 
     private void checkMorizonEstate(Url url, State state) throws IOException {
+        LOG.info("Checking {}", url.getUrl());
 
         Document doc = Jsoup.connect(url.getUrl()).get();
         LOG.debug(doc.toString());
@@ -74,8 +75,15 @@ public class MorizonService {
 
         flat.setContent(details);
 
-        flat.setAgent(doc.select("div.agentName").first().text());
-        flat.setAgency(doc.select("div.companyName").first().text());
+        Element agentDiv = doc.select("div.agentName").first();
+        if (agentDiv != null) {
+            flat.setAgent(agentDiv.text());
+        }
+
+        Element companyDiv = doc.select("div.companyName").first();
+        if (companyDiv != null) {
+            flat.setAgency(companyDiv.text());
+        }
 
         service.checkEstate(flat, state);
     }

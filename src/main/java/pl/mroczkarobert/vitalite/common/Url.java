@@ -1,6 +1,9 @@
 package pl.mroczkarobert.vitalite.common;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Url {
@@ -8,6 +11,8 @@ public class Url {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @CreationTimestamp
+    private Date createdDate;
 
     private String url;
     private Status status;

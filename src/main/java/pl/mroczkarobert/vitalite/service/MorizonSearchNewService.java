@@ -28,12 +28,9 @@ public class MorizonSearchNewService {
         String baseUrl = "https://www.morizon.pl/mieszkania/rynek-pierwotny/warszawa/wilanow/?ps[number_of_rooms_from]=3&ps[number_of_rooms_to]=3&ps[number_of_floors_to]=2";
 
         Document firstPage = Jsoup.connect(baseUrl).get();
+        LOG.info("First page");
         LOG.debug(firstPage.toString());
         saveAllNew(firstPage);
-
-        Document secondPage = Jsoup.connect(baseUrl + "&page=2").get();
-        LOG.debug(secondPage.toString());
-        saveAllNew(secondPage);
 
         LOG.info("Looking for new flats ended");
     }
