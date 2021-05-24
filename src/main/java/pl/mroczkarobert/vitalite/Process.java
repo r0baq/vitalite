@@ -26,21 +26,26 @@ public class Process {
     @Autowired
     private MorizonSearchNewService morizonSearchNewService;
 
+    @Autowired
+    private FriscoService friscoService;
+
     @PostConstruct
     public void init() throws IOException {
-        otodomSearchNewService.findNew();
-        morizonSearchNewService.findNew();
+        friscoService.findNew();
 
-        boolean changedVitalite = vitaliteService.checkVitalite();
-        boolean changedOutlet = vitaliteService.checkOutlet();
-        boolean changedMorizon = morizonService.check();
-        boolean changedOtodom = otodomService.check();
-
-        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
-            LOG.error("There were changes!");
-
-        } else {
-            LOG.warn("No changes at all.");
-        }
+//        otodomSearchNewService.findNew();
+//        morizonSearchNewService.findNew();
+//
+//        boolean changedVitalite = vitaliteService.checkVitalite();
+//        boolean changedOutlet = vitaliteService.checkOutlet();
+//        boolean changedMorizon = morizonService.check();
+//        boolean changedOtodom = otodomService.check();
+//
+//        if (changedVitalite || changedOutlet || changedMorizon || changedOtodom) {
+//            LOG.error("There were changes!");
+//
+//        } else {
+//            LOG.warn("No changes at all.");
+//        }
     }
 }
